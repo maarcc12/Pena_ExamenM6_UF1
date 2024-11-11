@@ -10,7 +10,7 @@
     <meta property="fb:admins" content="YourFacebookUsername" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="stylesheet" href="/normalised.css">
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 <!-- Prepare for second course --> 
     <script src="/script.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script> 
@@ -21,18 +21,66 @@
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
  -->
 
-</head> 
-<body> 
+
+</head>
+<body>
+    <h1>Cercar paraules amb un caràcter</h1>
 
     <fieldset>
-        <legend>Opció A</legend>
-        <label>Text:</label>
-        <textarea lang="el" rows="5" cols="45"></textarea><br/>
-        <label>Caracter:</label>
-        <input type="text"  id="windows_amount"></input><br/>
-        <input type="button" value="INICIAR" onclick="start()">
-    </fieldset> 
+    <legend>Opcio A - Marc Pena Claret</legend>
+    <label for="text">Text:</label>
+    <input type="text" id="text" name="text" required><br><br>
 
-<!-- Content --> 
-</body> 
-</html> 
+    <label for="caracter">Caràcter:</label>
+    <input type="text" id="caracter" name="caracter" maxlength="1" required><br><br>
+
+    <button onclick="buscar()">Cercar</button>
+
+    <div id="resultat"></div>
+    </fieldset>
+
+<script>
+    function buscar() {
+        const text = document.getElementById("text").value;
+        const caracter = document.getElementById("caracter").value;
+        const resultat = document.getElementById("resultat");
+        resultat.innerHTML = "";  // Netejar resultats anteriors
+
+        // Validar que el text té almenys dues paraules
+        const paraules = text.trim().split(" ");
+        if (paraules.length < 2) {
+            resultat.innerHTML = "<p class='error'>El text ha de tenir almenys dues paraules.</p>";
+            return;
+        }
+
+       
+
+        // Cercar paraules que continguin el caràcter
+        let trobades = "";
+
+        paraules.forEach((paraula) => {
+            const posicio = paraula.indexOf(caracter);
+            if (posicio !== -1) {
+                // Crear la paraula amb el caràcter en negrita
+                let paraulaAmbNegreta = "";
+                for (let i = 0; i < paraula.length; i++) {
+                    if (paraula[i] === caracter) {
+                        paraulaAmbNegreta += `<span class="negreta">${paraula[i]}</span>`;
+                    } else {
+                        paraulaAmbNegreta += paraula[i];
+                    }
+                }
+                trobades += `<li>${paraulaAmbNegreta} (Posició: ${posicio + 1})</li>`;
+            }
+        });
+
+        // Mostrar resultats
+        if (trobades) {
+            resultat.innerHTML = `<ul>${trobades}</ul>`;
+        } else {
+            resultat.innerHTML = "<p class='error'>No s'ha trobat cap coincidència.</p>";
+        }
+    }
+</script>
+</body>
+</html>
